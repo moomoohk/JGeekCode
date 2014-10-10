@@ -22,7 +22,7 @@ public class Test
 	{
 		try
 		{
-			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/geekcodeide/test/test.txt")), true));
+			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/jgeekcode/test/test.txt")), true));
 		}
 		catch (FileNotFoundException e1)
 		{

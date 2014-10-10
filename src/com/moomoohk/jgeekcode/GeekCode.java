@@ -402,9 +402,14 @@ public class GeekCode
 		this.categories.put(category.getCode(), category);
 	}
 
+	/**
+	 * Generates a String which contains all the Geek Code info in a format which parodies PGP.
+	 *
+	 * @return Geek Code block
+	 */
 	public String generate()
 	{
-		String st = "-----BEGIN GEEK CODE BLOCK-----\nVersion:3.12\nG";
+		String st = "-----BEGIN GEEK CODE BLOCK-----\nVersion: 3.12\nG";
 		for (G type : this.types)
 			st += type.name() + "/";
 		st = st.substring(0, st.length() - 1) + " ";
