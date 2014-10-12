@@ -16,20 +16,20 @@ public class SexGeekCodeCategoryBuilder extends ExtremeGenericGeekCodeCategoryBu
 
 	private static enum Gender
 	{
-		X, Y, Z;
+		x, y, z;
 	}
 
-	private Gender gender = Gender.Z;
+	private Gender gender = Gender.z;
 
 	public GeekCodeCategory male(GeekCodeGrade grade)
 	{
-		this.gender = Gender.Y;
+		this.gender = Gender.y;
 		return subValidate(grade);
 	}
 
 	public GeekCodeCategory female(GeekCodeGrade grade)
 	{
-		this.gender = Gender.X;
+		this.gender = Gender.x;
 		return subValidate(grade);
 	}
 

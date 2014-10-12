@@ -31,7 +31,7 @@ public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuild
 	protected Integer minGrade, maxGrade;
 	protected boolean noKnowledge = false;
 	protected boolean refuse = false;
-	protected BasicGeekCodeCategory crossover, wannabe;
+	protected BasicGeekCodeCategory wannabe;
 
 	public GeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
 	{
@@ -54,10 +54,10 @@ public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuild
 		return (GeekCodeCategoryBuilder) super.living();
 	}
 
-	public GeekCodeCategoryBuilder crossover(BasicGeekCodeCategory crossover)
+	@Override
+	public GeekCodeCategoryBuilder crossover(GeekCodeGrade crossover)
 	{
-		this.crossover = crossover;
-		return this;
+		return (GeekCodeCategoryBuilder) super.crossover(crossover);
 	}
 
 	public GeekCodeCategoryBuilder wannabe(BasicGeekCodeCategory wannabe)
@@ -124,8 +124,7 @@ public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuild
 		@Override
 		public String toString()
 		{
-			return (GeekCodeCategoryBuilder.this.refuse ? "!" : "") + this.code + super.toString() + (GeekCodeCategoryBuilder.this.crossover != null ? "(" + GeekCodeCategoryBuilder.this.crossover + ")" : "") + (GeekCodeCategoryBuilder.this.noKnowledge ? "?" : "")
-					+ (GeekCodeCategoryBuilder.this.wannabe != null ? ">" + GeekCodeCategoryBuilder.this.wannabe : "");
+			return (GeekCodeCategoryBuilder.this.refuse ? "!" : "") + this.code + super.toString() + (GeekCodeCategoryBuilder.this.noKnowledge ? "?" : "") + (GeekCodeCategoryBuilder.this.wannabe != null ? ">" + GeekCodeCategoryBuilder.this.wannabe : "");
 		}
 	}
 }

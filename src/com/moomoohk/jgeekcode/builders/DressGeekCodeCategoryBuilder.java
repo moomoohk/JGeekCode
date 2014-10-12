@@ -2,6 +2,11 @@ package com.moomoohk.jgeekcode.builders;
 
 import com.moomoohk.jgeekcode.GeekCodeGrade;
 
+/**
+ *
+ * @author Meshulam Silk (moomoohk@ymail.com)
+ * @since Oct 12, 2014
+ */
 public class DressGeekCodeCategoryBuilder extends GeekCodeCategoryBuilder
 {
 	public DressGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)

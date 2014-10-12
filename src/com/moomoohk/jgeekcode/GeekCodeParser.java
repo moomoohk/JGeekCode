@@ -19,6 +19,13 @@ import static com.moomoohk.jgeekcode.GeekCode.*;
  */
 public class GeekCodeParser
 {
+	private static enum Gender
+	{
+		MALE, FEMALE, UNSPECIFIED;
+	}
+
+	private static String categoryCode = null;
+
 	public static GeekCode parse(String geekCode)
 	{
 		GeekCode code = null;
@@ -30,14 +37,15 @@ public class GeekCodeParser
 			while (s.hasNextLine())
 			{
 				String line = s.nextLine().trim();
-				if (line.trim().length() == 0 || line.equals("-----BEGIN GEEK CODE BLOCK-----") || line.equals("------END GEEK CODE BLOCK------"))
-					continue;
-				lineNum++;
 				switch (lineNum)
 				{
+					case 0:
+						if (!line.equals("-----BEGIN GEEK CODE BLOCK-----"))
+							throw new GeekCodeParseException("Missing BEGIN GEEK CODE BLOCK on line 0!");
+						break;
 					case 1:
 						if (!line.startsWith("Version: "))
-							throw new GeekCodeParseException("No Geek Code version specified on line " + lineNum + "!");
+							throw new GeekCodeParseException("No Geek Code version specified on line 1!");
 						else
 							try (Scanner s2 = new Scanner(line))
 							{
@@ -48,7 +56,7 @@ public class GeekCodeParser
 							}
 						break;
 					case 2:
-						if (line.charAt(0) == 'G' && Character.isAlphabetic(line.charAt(1)))
+						if (line.length() > 0 && line.charAt(0) == 'G' && Character.isAlphabetic(line.charAt(1)))
 						{
 							String types = line.substring(1, line.indexOf(" "));
 							try (Scanner s2 = new Scanner(types))
@@ -146,170 +154,259 @@ public class GeekCodeParser
 									}
 								code = new GeekCode(geekTypes.toArray(new G[0]));
 							}
+							line = line.substring(line.indexOf(" ") + 1);
 						}
 						else
-							throw new GeekCodeParseException("No Geek type leading on line " + lineNum + "!");
-						break;
+							throw new GeekCodeParseException("No Geek type leading on line 2!");
 					default:
+						if (line.equals("------END GEEK CODE BLOCK------"))
+							break;
 						if (code == null)
 							throw new GeekCodeParseException("Parsing failed for unknown reason!");
-						try (Scanner s2 = new Scanner(line))
-						{
-							while (s2.hasNext())
-								evalExpression(s2.next());
-						}
-						catch (Exception e)
-						{
-							e.printStackTrace();
-							throw new GeekCodeParseException("Problem parsing expressions!");
-						}
+						String[] tokens = line.split(" ");
+						for (String token : tokens)
+							code.addCategory(evalExpression(token));
 						break;
 				}
+				lineNum++;
 			}
 		}
 		if (code == null)
 			throw new GeekCodeParseException("Parsing failed for unknown reason!");
+		System.out.println();
 		return code;
+	}
+
+	private static class Expression
+	{
+		private GeekCodeGrade grade;
+		private String modifiers;
+		private boolean refuse, notRigid, living, noKnowledge;
+
+		public Expression(String expression)
+		{
+
+		}
+
+		public GeekCodeGrade getGrade()
+		{
+			return this.grade;
+		}
+
+		public String getModifiers()
+		{
+			return this.modifiers;
+		}
+
+		public boolean refuse()
+		{
+			return this.refuse;
+		}
+
+		public boolean notRigid()
+		{
+			return this.notRigid;
+		}
+
+		public boolean living()
+		{
+			return this.living;
+		}
+
+		public boolean noKnowledge()
+		{
+			return this.noKnowledge;
+		}
 	}
 
 	private static GeekCodeCategory evalExpression(String expression)
 	{
-		boolean refuse = false, notRigid = false, noKnowledge = false;
+		System.out.println("Expression: " + expression);
+		boolean refuse = false, notRigid = false, living = false, noKnowledge = false;
 		if (expression.charAt(0) == '!')
 		{
 			refuse = true;
 			expression = expression.substring(1);
 		}
-		if (expression.charAt(expression.length() - 1) == '@')
-		{
-			expression = expression.substring(0, expression.length() - 1);
-			notRigid = true;
-		}
-		else
-			if (expression.charAt(expression.length() - 1) == '?')
-			{
-				expression = expression.substring(0, expression.length() - 1);
-				noKnowledge = true;
-			}
 		GeekCodeCategoryBuilder builder = null;
-		String grade = "";
-		int i = 0;
-		for (char c : expression.toCharArray())
+		String code = "", grade = "";
+		for (int i = 0; i < expression.length(); i++)
 		{
-			if (!Character.isLetter(c))
-			{
+			char c = expression.charAt(i);
+			if (Character.isLetter(c))
+				code += c;
+			else
 				if (i == 0)
-					throw new GeekCodeParseException("Missing category code!");
-				grade = expression.substring(i);
-			}
-			i++;
+					throw new GeekCodeParseException("No category code found!");
+				else
+				{
+					grade = expression.substring(i);
+					break;
+				}
 		}
-		System.out.println(expression + " " + grade);
-		switch (expression.charAt(0))
+		System.out.println("code " + code);
+		String modifiers = "";
+		for (int i = 0; i < grade.length(); i++)
 		{
-			case 'd':
+			char c = grade.charAt(i);
+			if (c != '+' && c != '-' && c != ':')
+			{
+				modifiers = grade.substring(i);
+				grade = grade.substring(0, i);
+			}
+		}
+		GeekCodeGrade gradeObj = evalGrade(grade);
+		String wannabe = "";
+		if (modifiers.contains(">"))
+		{
+			String[] wannabeSplit = modifiers.split(">");
+			modifiers = wannabeSplit[0];
+			wannabe = wannabeSplit[1];
+			if (wannabe.length() > 0)
+			{
+
+			}
+		}
+		String crossoverGrade = null;
+		if (modifiers.contains("("))
+		{
+			if (!modifiers.contains(")") || (modifiers.contains(")") && modifiers.indexOf("(") > modifiers.indexOf(")")))
+				throw new GeekCodeParseException("Unmatched parens for " + code + "!");
+			crossoverGrade = modifiers.substring(modifiers.indexOf("(") + 1, modifiers.indexOf(")"));
+			modifiers = modifiers.substring(0, modifiers.indexOf("(")) + modifiers.substring(modifiers.indexOf(")") + 1);
+			for (int i = 0; i < crossoverGrade.length(); i++)
+			{
+				char c = crossoverGrade.charAt(i);
+				if (c != '+' && c != '-')
+					throw new GeekCodeParseException("Bad crossover grade[" + crossoverGrade + "] for code " + code + "!");
+			}
+		}
+		notRigid = evalModifier(modifiers, '@');
+		living = evalModifier(modifiers, '$');
+		noKnowledge = evalModifier(modifiers, '?');
+
+		System.out.println("grade: " + gradeObj + " (" + gradeObj.getGrade() + ")");
+		System.out.println("modifiers: " + modifiers);
+		System.out.println(" refuse: " + refuse);
+		System.out.println(" living: " + living);
+		System.out.println(" notRigid: " + notRigid);
+		System.out.println(" noKnowledge: " + noKnowledge);
+		System.out.println("crossoverGrade: " + crossoverGrade);
+		System.out.println("wannabe: " + wannabe);
+		Gender gender = null;
+		switch (code)
+		{
+			case "d":
 				builder = d;
 				break;
-			case 's':
+			case "s":
 				builder = s;
 				if (!grade.contains(":"))
 					throw new GeekCodeParseException("Shape category missing \':\'!");
 				String[] grades = grade.split(":");
 				grade = grades[0];
-				((ShapeGeekCodeCategoryBuilder) builder).roundness(evalGrade(grades[1]));
+				((ShapeGeekCodeCategoryBuilder) builder).roundness(evalExpression(grades[1]));
 				break;
-			case 'a':
+			case "a":
 				builder = a;
 				break;
-			case 'C':
+			case "C":
 				builder = C;
 				break;
-			case 'U':
+			case "U":
 				builder = U;
 				break;
-			case 'P':
-				if (expression.startsWith("PS"))
-					builder = PS;
-				else
-					if (expression.startsWith("PE"))
-						builder = PE;
-					else
-						if (expression.startsWith("PGP"))
-							builder = PGP;
-						else
-							builder = P;
+			case "P":
+				builder = P;
 				break;
-			case 'L':
+			case "PS":
+				builder = PS;
+				break;
+			case "PE":
+				builder = PE;
+				break;
+			case "PGP":
+				builder = PGP;
+				break;
+			case "L":
 				builder = L;
 				break;
-			case 'E':
+			case "E":
 				builder = E;
 				break;
-			case 'W':
+			case "W":
 				builder = W;
 				break;
-			case 'N':
+			case "N":
 				builder = N;
 				break;
-			case 'o':
+			case "o":
 				builder = o;
 				break;
-			case 'K':
+			case "K":
 				builder = K;
 				break;
-			case 'w':
+			case "w":
 				builder = w;
 				break;
-			case 'O':
+			case "O":
 				builder = O;
 				break;
-			case 'M':
+			case "M":
 				builder = M;
 				break;
-			case 'V':
+			case "V":
 				builder = V;
 				break;
-			case 'Y':
+			case "Y":
 				builder = Y;
 				break;
-			case 't':
-				if (expression.startsWith("tv"))
-					builder = tv;
-				else
-					builder = t;
+			case "t":
+				builder = t;
 				break;
-			case '5':
+			case "tv":
+				builder = tv;
+				break;
+			case "5":
 				builder = BABYLON5;
 				break;
-			case 'X':
+			case "X":
 				builder = X;
 				break;
-			case 'R':
+			case "R":
 				builder = R;
 				break;
-			case 'b':
+			case "b":
 				builder = b;
 				break;
-			case 'D':
-				if (expression.startsWith("DI"))
-					builder = DI;
-				else
-					builder = D;
+			case "D":
+				builder = D;
 				break;
-			case 'G':
-				//builder = G;
+			case "DI":
+				builder = DI;
 				break;
-			case 'e':
+			case "G":
+				builder = GCode;
+				break;
+			case "e":
 				builder = e;
 				break;
-			case 'h':
+			case "h":
 				builder = h;
 				break;
-			case 'r':
+			case "r":
 				builder = r;
 				break;
-			case 'x':
-			case 'y':
+			case "x":
+				gender = Gender.FEMALE;
+				builder = z;
+				break;
+			case "y":
+				gender = Gender.MALE;
+				builder = z;
+				break;
+			case "z":
+				gender = Gender.UNSPECIFIED;
 				builder = z;
 				break;
 			default:
@@ -321,11 +418,44 @@ public class GeekCodeParser
 			return builder.noKnowledge();
 		if (notRigid)
 			builder.notRigid();
-		return builder.validate(evalGrade(grade));
+		if (living)
+			builder.living();
+		if (crossoverGrade != null)
+			builder.crossover(evalGrade(crossoverGrade));
+		System.out.println();
+		categoryCode = null;
+		return builder.grade(gradeObj);
 	}
 
 	private static GeekCodeGrade evalGrade(String grade)
 	{
-		return null;
+		Character gradeType = null;
+		int count = 0;
+		for (char c : grade.toCharArray())
+		{
+			if (gradeType != null)
+			{
+				if (c != gradeType)
+					throw new GeekCodeParseException("Bad grade[" + grade + "] for code " + categoryCode + "!");
+			}
+			else
+				gradeType = c;
+			if (c == '+')
+				count++;
+			if (c == '-')
+				count--;
+		}
+		return new GeekCodeGrade(count);
+	}
+
+	private static boolean evalModifier(String modifiers, char c)
+	{
+		if (modifiers.indexOf(c) != -1)
+		{
+			if ((!modifiers.contains(">") && modifiers.substring(modifiers.indexOf(c) + 1).indexOf(c) != -1) || (modifiers.contains(">") && !modifiers.substring(modifiers.indexOf(c) + 1).contains(">")))
+				throw new GeekCodeParseException(c + " defined more than once for " + categoryCode + "!");
+			return true;
+		}
+		return false;
 	}
 }
