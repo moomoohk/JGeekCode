@@ -1,5 +1,10 @@
 package com.moomoohk.jgeekcode.test;
 
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 import com.moomoohk.jgeekcode.GeekCode;
 import com.moomoohk.jgeekcode.GeekCode.G;
 import com.moomoohk.jgeekcode.GeekCodeGrade;
@@ -16,14 +21,14 @@ public class Test
 {
 	public static void main(String[] args)
 	{
-		//		try
-		//		{
-		//			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/jgeekcode/test/test.txt")), true));
-		//		}
-		//		catch (FileNotFoundException e1)
-		//		{
-		//			e1.printStackTrace();
-		//		}
+		try
+		{
+			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/jgeekcode/test/test.txt")), true));
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
 
 		GeekCode code = new GeekCode(G.CS, G.IT);
 
