@@ -4,6 +4,11 @@ import com.moomoohk.jgeekcode.GeekCodeGrade;
 
 public class DressGeekCodeCategoryBuilder extends GeekCodeCategoryBuilder
 {
+	public DressGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	boolean crossDresser, sameClothes;
 
 	public DressGeekCodeCategoryBuilder crossDresser()
@@ -29,12 +34,10 @@ public class DressGeekCodeCategoryBuilder extends GeekCodeCategoryBuilder
 		private DressGeekCodeCategory(GeekCodeGrade grade)
 		{
 			super(grade);
-		}
-
-		@Override
-		public String toString()
-		{
-			return (DressGeekCodeCategoryBuilder.this.crossDresser ? DressGeekCodeCategoryBuilder.this.code + "x" : (DressGeekCodeCategoryBuilder.this.sameClothes ? "pu" : super.toString()));
+			if (DressGeekCodeCategoryBuilder.this.crossDresser)
+				this.code += "x";
+			if (DressGeekCodeCategoryBuilder.this.sameClothes)
+				this.code += "pu";
 		}
 	}
 }

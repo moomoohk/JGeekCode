@@ -9,6 +9,11 @@ import com.moomoohk.jgeekcode.GeekCodeGrade;
  */
 public class GenericGeekCodeCategoryBuilder extends GeekCodeCategoryBuilder
 {
+	public GenericGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	@Override
 	protected GeekCodeCategory subValidate(GeekCodeGrade grade)
 	{

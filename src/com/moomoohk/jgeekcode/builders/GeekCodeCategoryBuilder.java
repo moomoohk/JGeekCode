@@ -25,44 +25,44 @@ import com.moomoohk.jgeekcode.GeekCodeGrade;
  * @author Meshulam Silk (moomoohk@ymail.com)
  * @since Oct 10, 2014
  */
-public abstract class GeekCodeCategoryBuilder
+public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuilder
 {
 	protected String code;
-	protected boolean notRigid = false;
-	protected boolean living = false;
+	protected Integer minGrade, maxGrade;
 	protected boolean noKnowledge = false;
 	protected boolean refuse = false;
-	protected Integer minGrade, maxGrade;
+	protected BasicGeekCodeCategory crossover, wannabe;
 
-	public GeekCodeCategoryBuilder code(String code)
+	public GeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
 	{
 		if (code.trim().length() == 0)
 			throw new GeekCodeException("code length must be > 0!");
 		this.code = code;
-		return this;
+		this.minGrade = minGrade;
+		this.maxGrade = maxGrade;
 	}
 
+	@Override
 	public GeekCodeCategoryBuilder notRigid()
 	{
-		this.notRigid = true;
-		return this;
+		return (GeekCodeCategoryBuilder) super.notRigid();
 	}
 
+	@Override
 	public GeekCodeCategoryBuilder living()
 	{
-		this.living = true;
+		return (GeekCodeCategoryBuilder) super.living();
+	}
+
+	public GeekCodeCategoryBuilder crossover(BasicGeekCodeCategory crossover)
+	{
+		this.crossover = crossover;
 		return this;
 	}
 
-	public GeekCodeCategoryBuilder minGrade(int minGrade)
+	public GeekCodeCategoryBuilder wannabe(BasicGeekCodeCategory wannabe)
 	{
-		this.minGrade = minGrade;
-		return this;
-	}
-
-	public GeekCodeCategoryBuilder maxGrade(int maxGrade)
-	{
-		this.maxGrade = maxGrade;
+		this.wannabe = wannabe;
 		return this;
 	}
 
@@ -71,7 +71,7 @@ public abstract class GeekCodeCategoryBuilder
 		if (this.notRigid || this.living)
 			throw new GeekCodeException("Can't noKnowledge while (notRigid || living)!");
 		this.noKnowledge = true;
-		return validate(null);
+		return grade(null);
 	}
 
 	public GeekCodeCategory refuse()
@@ -79,10 +79,11 @@ public abstract class GeekCodeCategoryBuilder
 		if (this.notRigid || this.living)
 			throw new GeekCodeException("Can't refuse while (notRigid || living)!");
 		this.refuse = true;
-		return validate(null);
+		return grade(null);
 	}
 
-	public GeekCodeCategory validate(GeekCodeGrade grade)
+	@Override
+	public GeekCodeCategory grade(GeekCodeGrade grade)
 	{
 		if (this.code == null)
 			throw new GeekCodeException("code not set!");
@@ -99,14 +100,13 @@ public abstract class GeekCodeCategoryBuilder
 
 	protected abstract GeekCodeCategory subValidate(GeekCodeGrade grade);
 
-	public class GeekCodeCategory
+	public class GeekCodeCategory extends BasicGeekCodeCategory
 	{
 		protected String code;
-		protected final GeekCodeGrade grade;
 
 		protected GeekCodeCategory(GeekCodeGrade grade)
 		{
-			this.grade = grade;
+			super(grade);
 			this.code = GeekCodeCategoryBuilder.this.code;
 		}
 
@@ -115,6 +115,7 @@ public abstract class GeekCodeCategoryBuilder
 			return this.code;
 		}
 
+		@Override
 		public GeekCodeGrade getGrade()
 		{
 			return this.grade;
@@ -123,7 +124,8 @@ public abstract class GeekCodeCategoryBuilder
 		@Override
 		public String toString()
 		{
-			return ((GeekCodeCategoryBuilder.this.refuse ? "!" : "") + this.code + (getGrade() != null ? getGrade() : "") + (GeekCodeCategoryBuilder.this.notRigid ? "@" : "") + (GeekCodeCategoryBuilder.this.living ? "$" : "") + (GeekCodeCategoryBuilder.this.noKnowledge ? "?" : ""));
+			return (GeekCodeCategoryBuilder.this.refuse ? "!" : "") + this.code + super.toString() + (GeekCodeCategoryBuilder.this.crossover != null ? "(" + GeekCodeCategoryBuilder.this.crossover + ")" : "") + (GeekCodeCategoryBuilder.this.noKnowledge ? "?" : "")
+					+ (GeekCodeCategoryBuilder.this.wannabe != null ? ">" + GeekCodeCategoryBuilder.this.wannabe : "");
 		}
 	}
 }

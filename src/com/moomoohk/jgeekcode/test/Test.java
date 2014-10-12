@@ -1,10 +1,5 @@
 package com.moomoohk.jgeekcode.test;
 
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-
 import com.moomoohk.jgeekcode.GeekCode;
 import com.moomoohk.jgeekcode.GeekCode.G;
 import com.moomoohk.jgeekcode.GeekCodeGrade;
@@ -20,48 +15,50 @@ public class Test
 {
 	public static void main(String[] args)
 	{
-		try
-		{
-			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/jgeekcode/test/test.txt")), true));
-		}
-		catch (FileNotFoundException e1)
-		{
-			e1.printStackTrace();
-		}
+		//		try
+		//		{
+		//			System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream("src/com/moomoohk/jgeekcode/test/test.txt")), true));
+		//		}
+		//		catch (FileNotFoundException e1)
+		//		{
+		//			e1.printStackTrace();
+		//		}
 
 		GeekCode code = new GeekCode(G.CS, G.IT);
 
-		code.addCategory(d.validate(new GeekCodeGrade(-1)));
-		code.addCategory(s.roundness(new GeekCodeGrade(-1)).validate(new GeekCodeGrade(3)));
-		code.addCategory(a.validate(new GeekCodeGrade(-3)));
-		code.addCategory(C.validate(new GeekCodeGrade(2)));
+		code.addCategory(d.crossDresser().sameClothes().grade(new GeekCodeGrade(2)));
+
+		//		code.addCategory(d.crossover(new BasicGeekCodeCategoryBuilder().living().grade(new GeekCodeGrade(0))).living().grade(new GeekCodeGrade(-1)));
+		//		code.addCategory(s.roundness(new BasicGeekCodeCategoryBuilder().grade(new GeekCodeGrade(-1))).grade(new GeekCodeGrade(3)));
+		//		code.addCategory(a.grade(new GeekCodeGrade(-3)));
+		//		code.addCategory(C.grade(new GeekCodeGrade(2)));
 		code.addCategory(U.noKnowledge());
-		code.addCategory(P.noKnowledge());
-		code.addCategory(E.validate(new GeekCodeGrade(-1)));
-		code.addCategory(W.validate(new GeekCodeGrade(3)));
-		code.addCategory(N.noKnowledge());
-		code.addCategory(o.noKnowledge());
-		code.addCategory(K.noKnowledge());
-		code.addCategory(w.validate(new GeekCodeGrade(-3)));
-		code.addCategory(O.noKnowledge());
-		code.addCategory(M.validate(new GeekCodeGrade(2)));
-		code.addCategory(V.noKnowledge());
-		code.addCategory(PS.validate(new GeekCodeGrade(0)));
-		code.addCategory(PE.refuse());
-		code.addCategory(Y.validate(new GeekCodeGrade(0)));
-		code.addCategory(t.noKnowledge());
-		code.addCategory(BABYLON5.noKnowledge());
-		code.addCategory(X.noKnowledge());
-		code.addCategory(R.refuse());
-		code.addCategory(tv.validate(new GeekCodeGrade(1)));
-		code.addCategory(b.validate(new GeekCodeGrade(1)));
-		code.addCategory(DI.validate(new GeekCodeGrade(0)));
-		code.addCategory(D.noKnowledge());
-		code.addCategory(GCode.validate(new GeekCodeGrade(2)));
-		code.addCategory(e.validate(new GeekCodeGrade(0)));
-		code.addCategory(h.validate(new GeekCodeGrade(-2)));
-		code.addCategory(r.refuse());
-		code.addCategory(z.male(new GeekCodeGrade(0)));
+		//		code.addCategory(P.noKnowledge());
+		//		code.addCategory(E.grade(new GeekCodeGrade(-1)));
+		//		code.addCategory(W.grade(new GeekCodeGrade(3)));
+		//		code.addCategory(N.noKnowledge());
+		//		code.addCategory(o.noKnowledge());
+		//		code.addCategory(K.noKnowledge());
+		//		code.addCategory(w.grade(new GeekCodeGrade(-3)));
+		//		code.addCategory(O.noKnowledge());
+		//		code.addCategory(M.grade(new GeekCodeGrade(2)));
+		//		code.addCategory(V.noKnowledge());
+		//		code.addCategory(PS.grade(new GeekCodeGrade(0)));
+		//		code.addCategory(PE.refuse());
+		//		code.addCategory(Y.grade(new GeekCodeGrade(0)));
+		//		code.addCategory(t.noKnowledge());
+		//		code.addCategory(BABYLON5.noKnowledge());
+		//		code.addCategory(X.noKnowledge());
+		//		code.addCategory(R.refuse());
+		//		code.addCategory(tv.grade(new GeekCodeGrade(1)));
+		//		code.addCategory(b.grade(new GeekCodeGrade(1)));
+		//		code.addCategory(DI.grade(new GeekCodeGrade(0)));
+		//		code.addCategory(D.noKnowledge());
+		//		code.addCategory(GCode.grade(new GeekCodeGrade(2)));
+		//		code.addCategory(e.grade(new GeekCodeGrade(0)));
+		//		code.addCategory(h.grade(new GeekCodeGrade(-2)));
+		//		code.addCategory(r.refuse());
+		//		code.addCategory(z.male(new GeekCodeGrade(0)));
 
 		System.out.println(code.generate());
 	}

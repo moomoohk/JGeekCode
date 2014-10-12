@@ -9,6 +9,11 @@ import com.moomoohk.jgeekcode.GeekCodeGrade;
  */
 public class ExtremeGenericGeekCodeCategoryBuilder extends GenericGeekCodeCategoryBuilder
 {
+	public ExtremeGenericGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	private int extreme;
 
 	public GeekCodeCategory extreme(int level)

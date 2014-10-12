@@ -9,6 +9,11 @@ import com.moomoohk.jgeekcode.GeekCodeGrade;
  */
 public class SexGeekCodeCategoryBuilder extends ExtremeGenericGeekCodeCategoryBuilder
 {
+	public SexGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	private static enum Gender
 	{
 		X, Y, Z;

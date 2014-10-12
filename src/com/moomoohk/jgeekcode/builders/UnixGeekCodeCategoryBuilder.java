@@ -69,6 +69,11 @@ public class UnixGeekCodeCategoryBuilder extends GeekCodeCategoryBuilder
 
 	private UnixType type;
 
+	public UnixGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	public UnixGeekCodeCategoryBuilder type(UnixType type)
 	{
 		this.type = type;
