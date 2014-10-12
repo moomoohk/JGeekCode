@@ -1,5 +1,6 @@
 package com.moomoohk.jgeekcode.builders;
 
+import com.moomoohk.jgeekcode.GeekCodeException;
 import com.moomoohk.jgeekcode.GeekCodeGrade;
 
 /**
@@ -21,16 +22,20 @@ public class SexGeekCodeCategoryBuilder extends ExtremeGenericGeekCodeCategoryBu
 
 	private Gender gender = Gender.z;
 
-	public GeekCodeCategory male(GeekCodeGrade grade)
+	public GeekCodeCategoryBuilder male()
 	{
+		if (this.gender != Gender.z)
+			throw new GeekCodeException("Gender already set!");
 		this.gender = Gender.y;
-		return subValidate(grade);
+		return this;
 	}
 
-	public GeekCodeCategory female(GeekCodeGrade grade)
+	public GeekCodeCategoryBuilder female()
 	{
+		if (this.gender != Gender.z)
+			throw new GeekCodeException("Gender already set!");
 		this.gender = Gender.x;
-		return subValidate(grade);
+		return this;
 	}
 
 	@Override

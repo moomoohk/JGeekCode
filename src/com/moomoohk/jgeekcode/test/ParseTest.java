@@ -70,6 +70,6 @@ public class ParseTest
 		}
 		System.out.println("INPUT:\n" + file);
 		System.out.println("DEBUG:");
-		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(file));
+		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(file).generate());
 	}
 }

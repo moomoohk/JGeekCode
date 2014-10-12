@@ -29,8 +29,6 @@ public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuild
 {
 	protected String code;
 	protected Integer minGrade, maxGrade;
-	protected boolean noKnowledge = false;
-	protected boolean refuse = false;
 	protected BasicGeekCodeCategory wannabe;
 
 	public GeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
@@ -66,20 +64,16 @@ public abstract class GeekCodeCategoryBuilder extends BasicGeekCodeCategoryBuild
 		return this;
 	}
 
-	public GeekCodeCategory noKnowledge()
-	{
-		if (this.notRigid || this.living)
-			throw new GeekCodeException("Can't noKnowledge while (notRigid || living)!");
-		this.noKnowledge = true;
-		return grade(null);
-	}
-
+	@Override
 	public GeekCodeCategory refuse()
 	{
-		if (this.notRigid || this.living)
-			throw new GeekCodeException("Can't refuse while (notRigid || living)!");
-		this.refuse = true;
-		return grade(null);
+		return (GeekCodeCategory) super.refuse();
+	}
+
+	@Override
+	public GeekCodeCategory noKnowledge()
+	{
+		return (GeekCodeCategory) super.noKnowledge();
 	}
 
 	@Override

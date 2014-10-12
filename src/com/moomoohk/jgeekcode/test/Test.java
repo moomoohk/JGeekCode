@@ -8,7 +8,6 @@ import java.io.PrintStream;
 import com.moomoohk.jgeekcode.GeekCode;
 import com.moomoohk.jgeekcode.GeekCode.G;
 import com.moomoohk.jgeekcode.GeekCodeGrade;
-import com.moomoohk.jgeekcode.builders.BasicGeekCodeCategoryBuilder;
 
 import static com.moomoohk.jgeekcode.GeekCode.*;
 
@@ -33,7 +32,7 @@ public class Test
 		GeekCode code = new GeekCode(G.CS, G.IT);
 
 		code.addCategory(d.crossover(new GeekCodeGrade(0)).living().grade(new GeekCodeGrade(-1)));
-		code.addCategory(s.roundness(new BasicGeekCodeCategoryBuilder().grade(new GeekCodeGrade(-1))).grade(new GeekCodeGrade(3)));
+		//		code.addCategory(s.roundness(new BasicGeekCodeCategoryBuilder().grade(new GeekCodeGrade(-1))).grade(new GeekCodeGrade(3)));
 		code.addCategory(a.grade(new GeekCodeGrade(-3)));
 		code.addCategory(C.grade(new GeekCodeGrade(2)));
 		code.addCategory(U.noKnowledge());
@@ -62,7 +61,7 @@ public class Test
 		code.addCategory(e.grade(new GeekCodeGrade(0)));
 		code.addCategory(h.grade(new GeekCodeGrade(-2)));
 		code.addCategory(r.refuse());
-		code.addCategory(z.male(new GeekCodeGrade(0)));
+		code.addCategory(z.male().grade(new GeekCodeGrade(0)));
 
 		System.out.println(code.generate());
 	}

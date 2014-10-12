@@ -12,6 +12,8 @@ public class BasicGeekCodeCategoryBuilder
 {
 	protected boolean notRigid = false;
 	protected boolean living = false;
+	protected boolean noKnowledge = false;
+	protected boolean refuse = false;
 	protected GeekCodeGrade crossover;
 
 	public BasicGeekCodeCategoryBuilder notRigid()
@@ -34,6 +36,22 @@ public class BasicGeekCodeCategoryBuilder
 	{
 		this.crossover = crossover;
 		return this;
+	}
+
+	public BasicGeekCodeCategory noKnowledge()
+	{
+		if (this.notRigid || this.living)
+			throw new GeekCodeException("Can't noKnowledge while (notRigid || living)!");
+		this.noKnowledge = true;
+		return grade(null);
+	}
+
+	public BasicGeekCodeCategory refuse()
+	{
+		if (this.notRigid || this.living)
+			throw new GeekCodeException("Can't refuse while (notRigid || living)!");
+		this.refuse = true;
+		return grade(null);
 	}
 
 	public BasicGeekCodeCategory grade(GeekCodeGrade grade)
