@@ -17,7 +17,7 @@ import static com.moomoohk.jgeekcode.GeekCode.*;
  * @author Meshulam Silk (moomoohk@ymail.com)
  * @since Oct 10, 2014
  */
-public class Test
+public class GenerateTest
 {
 	public static void main(String[] args)
 	{
@@ -36,7 +36,7 @@ public class Test
 		code.addCategory(s.roundness(new BasicGeekCodeCategoryBuilder().grade(new GeekCodeGrade(-1))).grade(new GeekCodeGrade(3)));
 		code.addCategory(a.grade(new GeekCodeGrade(-3)));
 		code.addCategory(C.grade(new GeekCodeGrade(2)));
-		code.addCategory(U.B().grade(new GeekCodeGrade(2)));
+		code.addCategory(U.noKnowledge());
 		code.addCategory(P.noKnowledge());
 		code.addCategory(E.grade(new GeekCodeGrade(-1)));
 		code.addCategory(W.grade(new GeekCodeGrade(3)));

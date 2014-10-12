@@ -11,6 +11,11 @@ public class StarTrekGeekCodeCategoryBuilder extends ExtremeGenericGeekCodeCateg
 {
 	private boolean barclay;
 
+	public StarTrekGeekCodeCategoryBuilder(String code, int minGrade, int maxGrade)
+	{
+		super(code, minGrade, maxGrade);
+	}
+
 	public GeekCodeCategory extreme()
 	{
 		this.barclay = true;

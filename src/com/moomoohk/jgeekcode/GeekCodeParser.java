@@ -23,6 +23,7 @@ public class GeekCodeParser
 
 	public static GeekCode parse(String geekCode)
 	{
+		geekCode = geekCode.trim();
 		GeekCode code = null;
 		String version = null;
 		ArrayList<G> geekTypes = new ArrayList<>();
@@ -155,7 +156,11 @@ public class GeekCodeParser
 							throw new GeekCodeParseException("No Geek type leading on line 2!");
 					default:
 						if (line.equals("------END GEEK CODE BLOCK------"))
-							break;
+							if (s.hasNextLine())
+								throw new GeekCodeParseException("Nothing can come after ------END GEEK CODE BLOCK------ line!");
+							else
+								break;
+						System.out.println("LIENENENNENENE " + line);
 						if (code == null)
 							throw new GeekCodeParseException("Parsing failed for unknown reason!");
 						String[] tokens = line.split(" ");
@@ -178,7 +183,7 @@ public class GeekCodeParser
 		private GeekCodeGrade crossover;
 		private String categoryCode = "", modifiers = "";
 		private boolean refuse = false, notRigid = false, living = false, noKnowledge = false;
-		private Expression wannabe;
+		private Expression wannabe, alt;
 
 		public Expression(String expression, boolean includesCategoryCode)
 		{
@@ -215,7 +220,6 @@ public class GeekCodeParser
 				else
 					this.wannabe = new Expression(wannabeSplit[1], false);
 			}
-			String grade = "";
 			String crossoverGrade = null;
 			if (this.modifiers.contains("("))
 			{
@@ -230,17 +234,21 @@ public class GeekCodeParser
 						throw new GeekCodeParseException("Bad crossover grade[" + crossoverGrade + "] for code " + this.categoryCode + "!");
 				}
 			}
-			else
-				for (int i = 0; i < this.modifiers.length(); i++)
-				{
-					char c = this.modifiers.charAt(i);
-					if ((c != '+' && c != '-' && c != ':') || i == this.modifiers.length() - 1)
-					{
-						grade = this.modifiers.substring(0, i + 1);
-						this.modifiers = this.modifiers.substring(i + 1);
-						break;
-					}
-				}
+			String grade = "";
+			int i = 0;
+			for (i = 0; i < this.modifiers.length(); i++)
+			{
+				char c = this.modifiers.charAt(i);
+				if (c != '+' && c != '-' && c != ':')
+					break;
+
+			}
+			grade = this.modifiers.substring(0, i);
+			if (grade.contains(":"))
+			{
+				this.alt = new Expression(grade.substring(grade.indexOf(":") + 1), false);
+				grade = grade.substring(0, grade.indexOf(":"));
+			}
 			this.grade = evalGrade(grade);
 			if (crossoverGrade != null)
 				this.crossover = evalGrade(crossoverGrade);
@@ -248,6 +256,7 @@ public class GeekCodeParser
 			this.living = evalModifier(this.modifiers, '$');
 			this.noKnowledge = evalModifier(this.modifiers, '?');
 
+			System.out.println("expression: " + expression);
 			System.out.println("grade: " + this.grade + " (" + this.grade.getGrade() + ")");
 			System.out.println("modifiers: " + this.modifiers);
 			System.out.println(" refuse: " + this.refuse);
@@ -298,11 +307,15 @@ public class GeekCodeParser
 		{
 			return this.wannabe;
 		}
+
+		public Expression getAlt()
+		{
+			return this.alt;
+		}
 	}
 
 	private static GeekCodeCategory evalExpression(String expression)
 	{
-		System.out.println("Expression: " + expression);
 		GeekCodeCategoryBuilder builder = null;
 		Expression mainExpression = new Expression(expression, true);
 
@@ -312,12 +325,7 @@ public class GeekCodeParser
 				builder = d;
 				break;
 			case "s":
-				builder = s;
-				//				if (!mainExpression.getGrade().getGrade().contains(":"))
-				//					throw new GeekCodeParseException("Shape category missing \':\'!");
-				//				String[] grades = grade.split(":");
-				//				grade = grades[0];
-				//				((ShapeGeekCodeCategoryBuilder) builder).roundness(evalExpression(grades[1]));
+				builder = s.roundness(new BasicGeekCodeCategoryBuilder().grade(mainExpression.getAlt().getGrade()));
 				break;
 			case "a":
 				builder = a;
@@ -327,6 +335,42 @@ public class GeekCodeParser
 				break;
 			case "U":
 				builder = U;
+				break;
+			case "UB":
+				builder = U.B();
+				break;
+			case "UL":
+				builder = U.L();
+				break;
+			case "UU":
+				builder = U.U();
+				break;
+			case "UA":
+				builder = U.A();
+				break;
+			case "UV":
+				builder = U.V();
+				break;
+			case "UH":
+				builder = U.H();
+				break;
+			case "UI":
+				builder = U.I();
+				break;
+			case "UO":
+				builder = U.O();
+				break;
+			case "US":
+				builder = U.S();
+				break;
+			case "UC":
+				builder = U.C();
+				break;
+			case "UX":
+				builder = U.X();
+				break;
+			case "U*":
+				builder = U.other();
 				break;
 			case "P":
 				builder = P;
