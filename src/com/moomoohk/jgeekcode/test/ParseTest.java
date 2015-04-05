@@ -1,5 +1,9 @@
 package com.moomoohk.jgeekcode.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import com.moomoohk.jgeekcode.GeekCode;
 import com.moomoohk.jgeekcode.GeekCode.G;
 import com.moomoohk.jgeekcode.GeekCodeGrade;
@@ -25,7 +29,7 @@ public class ParseTest
 		code.addCategory(C.grade(new GeekCodeGrade(2)));
 		code.addCategory(U.noKnowledge());
 		code.addCategory(P.noKnowledge());
-		code.addCategory(E.grade(new GeekCodeGrade(-1)));
+		code.addCategory(E.living().grade(new GeekCodeGrade(-1)));
 		code.addCategory(W.grade(new GeekCodeGrade(3)));
 		code.addCategory(N.noKnowledge());
 		code.addCategory(o.noKnowledge());
@@ -53,20 +57,21 @@ public class ParseTest
 
 		System.out.println("INPUT:\n" + code.generate());
 		System.out.println("DEBUG:");
-		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(code.generate()));
+		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(code.generate()).generate());
+		System.out.println();
 
-		//		String file = "";
-		//		try (Scanner s = new Scanner(new File("src/com/moomoohk/jgeekcode/test/test.txt")))
-		//		{
-		//			while (s.hasNextLine())
-		//				file += s.nextLine() + "\n";
-		//		}
-		//		catch (FileNotFoundException e1)
-		//		{
-		//			e1.printStackTrace();
-		//		}
-		//		System.out.println("INPUT:\n" + file);
-		//		System.out.println("DEBUG:");
-		//		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(file).generate());
+		String file = "";
+		try (Scanner s = new Scanner(new File("src/com/moomoohk/jgeekcode/test/test.txt")))
+		{
+			while (s.hasNextLine())
+				file += s.nextLine() + "\n";
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
+		System.out.println("INPUT:\n" + file);
+		System.out.println("DEBUG:");
+		System.out.println("OUTPUT:\n" + GeekCodeParser.parse(file).generate());
 	}
 }

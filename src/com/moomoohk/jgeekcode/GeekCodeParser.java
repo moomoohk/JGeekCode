@@ -10,8 +10,7 @@ import com.moomoohk.jgeekcode.GeekCode.G;
 import com.moomoohk.jgeekcode.builders.BasicGeekCodeCategoryBuilder;
 import com.moomoohk.jgeekcode.builders.GeekCodeCategoryBuilder;
 import com.moomoohk.jgeekcode.builders.GeekCodeCategoryBuilder.GeekCodeCategory;
-
-import static com.moomoohk.jgeekcode.GeekCode.*;
+import com.moomoohk.jgeekcode.builders.ShapeGeekCodeCategoryBuilder;
 
 /**
  * @author Meshulam Silk (moomoohk@ymail.com)
@@ -160,7 +159,6 @@ public class GeekCodeParser
 								throw new GeekCodeParseException("Nothing can come after ------END GEEK CODE BLOCK------ line!");
 							else
 								break;
-						System.out.println("LIENENENNENENE " + line);
 						if (code == null)
 							throw new GeekCodeParseException("Parsing failed for unknown reason!");
 						String[] tokens = line.split(" ");
@@ -316,155 +314,20 @@ public class GeekCodeParser
 
 	private static GeekCodeCategory evalExpression(String expression)
 	{
-		GeekCodeCategoryBuilder builder = null;
 		Expression mainExpression = new Expression(expression, true);
-
-		switch (mainExpression.getCategoryCode())
+		GeekCodeCategoryBuilder builder = null;
+		try
 		{
-			case "d":
-				builder = d;
-				break;
-			case "s":
-				builder = s.roundness(new BasicGeekCodeCategoryBuilder().grade(mainExpression.getAlt().getGrade()));
-				break;
-			case "a":
-				builder = a;
-				break;
-			case "C":
-				builder = C;
-				break;
-			case "U":
-				builder = U;
-				break;
-			case "UB":
-				builder = U.B();
-				break;
-			case "UL":
-				builder = U.L();
-				break;
-			case "UU":
-				builder = U.U();
-				break;
-			case "UA":
-				builder = U.A();
-				break;
-			case "UV":
-				builder = U.V();
-				break;
-			case "UH":
-				builder = U.H();
-				break;
-			case "UI":
-				builder = U.I();
-				break;
-			case "UO":
-				builder = U.O();
-				break;
-			case "US":
-				builder = U.S();
-				break;
-			case "UC":
-				builder = U.C();
-				break;
-			case "UX":
-				builder = U.X();
-				break;
-			case "U*":
-				builder = U.other();
-				break;
-			case "P":
-				builder = P;
-				break;
-			case "PS":
-				builder = PS;
-				break;
-			case "PE":
-				builder = PE;
-				break;
-			case "PGP":
-				builder = PGP;
-				break;
-			case "L":
-				builder = L;
-				break;
-			case "E":
-				builder = E;
-				break;
-			case "W":
-				builder = W;
-				break;
-			case "N":
-				builder = N;
-				break;
-			case "o":
-				builder = o;
-				break;
-			case "K":
-				builder = K;
-				break;
-			case "w":
-				builder = w;
-				break;
-			case "O":
-				builder = O;
-				break;
-			case "M":
-				builder = M;
-				break;
-			case "V":
-				builder = V;
-				break;
-			case "Y":
-				builder = Y;
-				break;
-			case "t":
-				builder = t;
-				break;
-			case "tv":
-				builder = tv;
-				break;
-			case "5":
-				builder = BABYLON5;
-				break;
-			case "X":
-				builder = X;
-				break;
-			case "R":
-				builder = R;
-				break;
-			case "b":
-				builder = b;
-				break;
-			case "D":
-				builder = D;
-				break;
-			case "DI":
-				builder = DI;
-				break;
-			case "G":
-				builder = GCode;
-				break;
-			case "e":
-				builder = e;
-				break;
-			case "h":
-				builder = h;
-				break;
-			case "r":
-				builder = r;
-				break;
-			case "x":
-				builder = z.female();
-				break;
-			case "y":
-				builder = z.male();
-				break;
-			case "z":
-				builder = z;
-				break;
-			default:
-				throw new GeekCodeParseException("Unrecognized expression[" + expression + "]!");
+			builder = GeekCode.getBuilder(mainExpression.getCategoryCode());
 		}
+		catch (GeekCodeException e)
+		{
+			throw new GeekCodeParseException("Unrecognized expression[" + expression + "]!");
+		}
+		System.out.println(mainExpression.getCategoryCode());
+		if (mainExpression.getCategoryCode().equals("s"))
+			builder = ((ShapeGeekCodeCategoryBuilder) builder).roundness(new BasicGeekCodeCategoryBuilder().grade(mainExpression.getAlt().getGrade()));
+
 		if (mainExpression.refuse())
 			return builder.refuse();
 		if (mainExpression.noKnowledge())
