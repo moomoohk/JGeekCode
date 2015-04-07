@@ -335,7 +335,7 @@ public class GeekCode
 	/**
 	 * <h1>Role Playing</h1>
 	 * <p>
-	 * Role-playing games such as Dungeons & Dragons have long been a part of the traditional geek life. Because geeks often become so involved in their role-playing that they lose touch with reality, include one of the following role-playing codes.
+	 * Role-playing games such as Dungeons &amp; Dragons have long been a part of the traditional geek life. Because geeks often become so involved in their role-playing that they lose touch with reality, include one of the following role-playing codes.
 	 * </p>
 	 */
 	public static final ExtremeGenericGeekCodeCategoryBuilder R = (ExtremeGenericGeekCodeCategoryBuilder) getBuilder("R");
@@ -343,7 +343,7 @@ public class GeekCode
 	/**
 	 * <h1>Role Playing</h1>
 	 * <p>
-	 * Role-playing games such as Dungeons & Dragons have long been a part of the traditional geek life. Because geeks often become so involved in their role-playing that they lose touch with reality, include one of the following role-playing codes.
+	 * Role-playing games such as Dungeons &amp; Dragons have long been a part of the traditional geek life. Because geeks often become so involved in their role-playing that they lose touch with reality, include one of the following role-playing codes.
 	 * </p>
 	 */
 	public static final GenericGeekCodeCategoryBuilder tv = (GenericGeekCodeCategoryBuilder) getBuilder("tv");
